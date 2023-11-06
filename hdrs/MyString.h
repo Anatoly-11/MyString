@@ -10,6 +10,10 @@
 namespace MyString {
   // Класс строки реализующий её основные функции 
   class MYSTRING_DLL MyString {
+    int cmp(const MyString &) const noexcept;
+    int cmp(const char *) const noexcept;
+    friend   int cmp(const char *str, const MyString &s) noexcept;
+
   public:
 
     // Оператор сложения cтрокb с нулевым окончанием c MyString
@@ -18,6 +22,20 @@ namespace MyString {
     // Оператор сложения символa c MyString
     friend MYSTRING_DLL  MyString operator+(const char chr, const MyString &str) noexcept;
 
+    // Оператор равенства строкой с нулевым окончанием с MyString
+    friend MYSTRING_DLL  bool operator==(const char *_cs, const MyString &s) noexcept;
+
+    // Оператор неравенства строкой с нулевым окончанием с MyString
+    friend MYSTRING_DLL  bool operator!=(const char *_cs, const MyString &s) noexcept;
+
+    // Оператор > и т.д.
+    friend MYSTRING_DLL bool operator>(const char *_s, const MyString &s ) noexcept;
+
+    friend MYSTRING_DLL  bool operator<(const char *_s, const MyString &s) noexcept;
+
+    friend MYSTRING_DLL  bool operator>=(const char *_s, const MyString &s) noexcept;
+
+    friend MYSTRING_DLL  bool operator<=(const char *_s, const MyString &s) noexcept;
 
     // Конструктор по умолчанию
     MyString() noexcept;
@@ -58,9 +76,6 @@ namespace MyString {
     // обратить строку
     void reverse() noexcept;
 
-    // Оператор равенства строк
-    bool operator==(const MyString &) const noexcept;
-
     // Оператор равенства со внешней строкой с нулевым окончанием
     bool operator==(const char *) const noexcept;
 
@@ -69,6 +84,26 @@ namespace MyString {
 
     // Оператор неравенства со внешней строкой с нулевым окончанием
     bool operator!=(const char*) const noexcept;
+
+    // Оператор равенства строк
+    bool operator==(const MyString &) const noexcept;
+
+    // Оператор > и т.д.
+    bool operator>(const MyString &) const noexcept;
+
+    bool operator<(const MyString &) const noexcept;
+
+    bool operator>=(const MyString &) const noexcept;
+
+    bool operator<=(const MyString &) const noexcept;
+
+    bool operator>(const char *_s) const noexcept;
+
+    bool operator<(const char *_s) const noexcept;
+
+    bool operator>=(const char *_s) const noexcept;
+
+    bool operator<=(const char *_s) const noexcept;
 
     // Оператор присвоения копии
     MyString &operator=(const MyString &) noexcept;
@@ -95,8 +130,6 @@ namespace MyString {
     char operator[](const size_t) const noexcept;
 
   private:
-    int cmp(const MyString &) const noexcept;
-    int cmp(const char *) const noexcept;
     // Не перставлять местами!!!
     size_t _capacity;
     size_t _size;

@@ -128,6 +128,38 @@ namespace MyString {
     return !(*this == str);
   }
   //-------------------------------------------------------------------------------------------------------------------------------
+  bool MyString :: operator>(const MyString &_s) const noexcept {
+    return cmp(_s._str) > 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  bool MyString :: operator<(const MyString &_s) const noexcept {
+    return cmp(_s._str) < 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  bool MyString :: operator>=(const MyString &_s) const noexcept {
+    return cmp(_s._str) >= 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  bool MyString :: operator<=(const MyString &_s) const noexcept {
+    return cmp(_s._str) <= 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  bool MyString :: operator>(const char *_s) const noexcept {
+    return cmp(_s) > 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  bool MyString :: operator<(const char *_s) const noexcept {
+    return cmp(_s) < 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  bool MyString :: operator>=(const char *_s) const noexcept {
+    return cmp(_s) >= 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  bool MyString :: operator<=(const char *_s) const noexcept {
+    return cmp(_s) <= 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
   MyString &MyString :: operator = (const MyString &str) noexcept {
     if(this != &str)
       *this = str._str;
@@ -177,7 +209,7 @@ namespace MyString {
     return newStr;
   }
   //-------------------------------------------------------------------------------------------------------------------------------
-  MyString MyString :: operator + (const char *str) noexcept {
+  MyString MyString :: operator+(const char *str) noexcept {
     const size_t len = str == nullptr ? 0 : strlen(str);
     if(!len) return MyString(*this);
     MyString newStr(_size + len + 1);
@@ -217,6 +249,39 @@ namespace MyString {
     newStr._str[str._size + 1] = '\0';
     newStr._size = str._size + 1;
     return newStr;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  int cmp(const char *str,  const MyString &s) noexcept {
+    size_t len = str ? strlen(str) : 0;
+    int diff = static_cast<int>(len - s._size);
+    return s._str != nullptr && str != nullptr ? (len != s._size ? diff : strcmp(str, s._str))
+      : s._str == nullptr && str != nullptr ? 1
+      : s._str != nullptr && str == nullptr ? -1
+      : 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  MYSTRING_DLL  bool operator==(const char *_cs, const MyString &s) noexcept {
+    return cmp(_cs, s) == 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  MYSTRING_DLL  bool operator!=(const char *_cs, const MyString &s) noexcept {
+    return cmp(_cs, s) != 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  MYSTRING_DLL bool operator>(const char *_cs, const MyString &s) noexcept {
+    return cmp(_cs, s) > 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  MYSTRING_DLL  bool operator<(const char *_cs, const MyString &s) noexcept {
+    return cmp(_cs, s) < 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  MYSTRING_DLL  bool operator>=(const char *_cs, const MyString &s) noexcept {
+    return cmp(_cs, s) >= 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  MYSTRING_DLL  bool operator<=(const char *_cs, const MyString &s) noexcept {
+    return cmp(_cs, s) <= 0;
   }
 }
 //---------------------------------------------------------------------------------------------------------------------------------
