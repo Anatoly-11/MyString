@@ -49,10 +49,7 @@ namespace MyString {
   int MyString::cmp(const char *str) const noexcept {
     size_t len = str ? strlen(str) : 0;
     int diff = static_cast<int>(_size - len);
-    return _str != nullptr && str != nullptr ? (len != _size ? diff : strcmp(_str, str))
-      : _str == nullptr && str != nullptr ? -1
-      : _str != nullptr && str == nullptr ? 1
-      : 0;
+    return !diff ? strcmp(_str, str) : diff;
   }
   //-------------------------------------------------------------------------------------------------------------------------------
   MyString :: ~MyString() noexcept {
@@ -91,7 +88,7 @@ namespace MyString {
       _size = _capacity = 0;
       return;
     }
-    size_t len = AlignedSize(_n), sz = _size < len - 1 ? _size : len - 1;
+    size_t len = AlignedSize(_n), sz = _size < len - 1 ? _size : len - 1; // Если помещается, то обрезать не надо!!!
     if(len == _capacity) return; // тоже неча резервировать!
     char *ss = new char[len];
     if(sz > 0) {
@@ -102,6 +99,17 @@ namespace MyString {
     _capacity = len;
     delete[] _str;
     _str = ss;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  void MyString::truncate(const size_t _n) noexcept {
+    if(_n < _size) {
+      _str[_n] = '\0';
+      _size = _n;
+      if(_capacity > (_n << 2)  + 1) { // Если ёмкость больше чем для записи ещё 3-х таких же строк то слишком много,
+        // уменьшаем ёмкость
+        shink_to_fit();
+      }
+    }
   }
   //-------------------------------------------------------------------------------------------------------------------------------
   void MyString::reverse() noexcept {
@@ -254,10 +262,7 @@ namespace MyString {
   int cmp(const char *str,  const MyString &s) noexcept {
     size_t len = str ? strlen(str) : 0;
     int diff = static_cast<int>(len - s._size);
-    return s._str != nullptr && str != nullptr ? (len != s._size ? diff : strcmp(str, s._str))
-      : s._str == nullptr && str != nullptr ? 1
-      : s._str != nullptr && str == nullptr ? -1
-      : 0;
+    return !diff ? strcmp(str,  s._str) : diff;
   }
   //-------------------------------------------------------------------------------------------------------------------------------
   MYSTRING_DLL  bool operator==(const char *_cs, const MyString &s) noexcept {
