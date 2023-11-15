@@ -11,6 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решен
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{2B5DC366-E7FE-4EAB-BEA8-186853540C7E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CC7E4861-18B0-427E-BA94-B1C2A605AD3E} = {CC7E4861-18B0-427E-BA94-B1C2A605AD3E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

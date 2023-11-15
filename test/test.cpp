@@ -87,3 +87,11 @@ TEST(CharPlusMyString, Test13) {
   EXPECT_TRUE(s3 == "A InavPetrov");
 }
 //---------------------------------------------------------------------------------------------------------------------------------
+TEST(MyStringCreateMovePtr, Test14) {
+  constexpr size_t SZ = 24;
+  char *val = new char[SZ]{"Piter Ivanov"};
+  MyString::MyString p(std::move(val), SZ);
+  EXPECT_STREQ(p.c_str(), "Piter Ivanov");
+  EXPECT_TRUE(val == nullptr);
+}
+//---------------------------------------------------------------------------------------------------------------------------------

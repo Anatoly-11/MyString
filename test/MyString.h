@@ -15,8 +15,8 @@ namespace MyString {
     friend   int cmp(const char *str, const MyString &s) noexcept;
 
   public:
-
-    // Оператор сложения cтрокb с нулевым окончанием c MyString
+#pragma region FriendsFuncs
+    // Оператор сложения cтроки с нулевым окончанием c MyString
     friend MYSTRING_DLL  MyString operator+(const char *_cstr, const MyString &str) noexcept;
 
     // Оператор сложения символa c MyString
@@ -29,13 +29,14 @@ namespace MyString {
     friend MYSTRING_DLL  bool operator!=(const char *_cs, const MyString &s) noexcept;
 
     // Оператор > и т.д.
-    friend MYSTRING_DLL bool operator>(const char *_s, const MyString &s ) noexcept;
+    friend MYSTRING_DLL bool operator>(const char *_s, const MyString &s) noexcept;
 
     friend MYSTRING_DLL  bool operator<(const char *_s, const MyString &s) noexcept;
 
     friend MYSTRING_DLL  bool operator>=(const char *_s, const MyString &s) noexcept;
 
     friend MYSTRING_DLL  bool operator<=(const char *_s, const MyString &s) noexcept;
+#pragma endregion
 
     // Конструктор по умолчанию
     MyString() noexcept;
@@ -49,6 +50,9 @@ namespace MyString {
     // Конструктор со строкой
     MyString(const char *) noexcept;
 
+    // Конструктор перемещения со строкой
+    MyString(char *&&, const size_t) noexcept;
+    
     // Конструктор копии
     MyString(const MyString &) noexcept;
 

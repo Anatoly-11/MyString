@@ -1,10 +1,12 @@
 #include "MyString.h"
 #include <cstring>
+#include <utility>
 //---------------------------------------------------------------------------------------------------------------------------------
 namespace MyString {
   static size_t AlignedSize(size_t x, size_t align = 4) { // Функция дял получения выравненного значения
     // на заданую границу
     if(!x) return align;
+    if(x != 0 && (x & (x - 1)) == 0 && x >= align) return x; // состоит из 1 бита и больше выравнивания
     x |= x >> 1;
     x |= x >> 2;
     x |= x >> 4;
@@ -17,7 +19,7 @@ namespace MyString {
     return r;
   }
   //-------------------------------------------------------------------------------------------------------------------------------
-  MyString::MyString() noexcept: _str(nullptr), _size(0), _capacity(0) {
+  MyString::MyString() noexcept : _str(nullptr), _size(0), _capacity(0) {
   }
   //-------------------------------------------------------------------------------------------------------------------------------
   MyString::MyString(const size_t _n) noexcept : _capacity(AlignedSize(_n)), _size(0), _str(new char[_capacity]) {
@@ -31,6 +33,16 @@ namespace MyString {
   MyString::MyString(MyString &&str) noexcept : _capacity(str._capacity), _size(str._size), _str(str._str) {
     str._str = nullptr;
     str._size = str._capacity = 0;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
+  MyString::MyString::MyString(char *&&s, const size_t _cap) noexcept  {
+    if(s == nullptr || *s == 0) {
+      _str = nullptr;  _size = _capacity = 0;
+      return;
+    }
+    _size = strlen(s);
+    _capacity = _cap >  _size + 1 ? _cap : _size + 1;
+    _str = s; s = nullptr;
   }
   //-------------------------------------------------------------------------------------------------------------------------------
   MyString::MyString(const char *str) noexcept : MyString()  {
@@ -208,7 +220,7 @@ namespace MyString {
     return *this;
   }
   //-------------------------------------------------------------------------------------------------------------------------------
-  MyString MyString :: operator + (const MyString &str) noexcept {
+  MyString MyString :: operator+(const MyString &str) noexcept {
     if(str.emptу()) return MyString(*this);
     MyString newStr(_size + str._size + 1);
     memcpy(newStr._str, _str, _size);
@@ -249,7 +261,8 @@ namespace MyString {
   }
   //-------------------------------------------------------------------------------------------------------------------------------
   MYSTRING_DLL  MyString operator+(const char chr, const MyString &str) noexcept {
-    if(chr == '\0') return MyString(""); // добавление нулевого окончания спереди эквивалентно пустой строке независмио
+    if(chr == '\0')
+      return MyString(""); // добавление нулевого окончания спереди эквивалентно пустой строке независмио
     // от того что дальше
     MyString newStr(str._size + 2);
     newStr._str[0] = chr;
